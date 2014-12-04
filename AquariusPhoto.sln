@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AquariusPhoto", "AquariusPhoto.vcproj", "{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		DebugU|Win32 = DebugU|Win32
+		Release|Win32 = Release|Win32
+		ReleaseU|Win32 = ReleaseU|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.Debug|Win32.Build.0 = Debug|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.DebugU|Win32.ActiveCfg = Debug|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.DebugU|Win32.Build.0 = Debug|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.Release|Win32.ActiveCfg = Release|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.Release|Win32.Build.0 = Release|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.ReleaseU|Win32.ActiveCfg = Release|Win32
+		{1C289EF1-1B4A-45FE-BBA1-0361EBFF3156}.ReleaseU|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
