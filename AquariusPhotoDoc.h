@@ -14,12 +14,16 @@ protected:
 	DECLARE_DYNCREATE(CAquariusPhotoDoc);	
 
 public:
-	BOOL Draw(Graphics* pGraphics);
+	void OnRedo(CView* pView);
+	void OnUndo(CView* pView);
+
+	BOOL Draw(Image* pImg);
 	BOOL DrawSelectRegion(Graphics* pGraphics);
 	BOOL DrawImage(Graphics* pGraphics);
 	BOOL DrawShape(Graphics* pGraphics);
 
 	BOOL RotateImage(CView* pView, RotateFlipType type);
+	BOOL OnClip();
 
 	BOOL UpdateStatusBarImageSize();
 	BOOL UpdateStatusBarFileSize(LPCTSTR lpszPathName);
@@ -39,15 +43,9 @@ public:
 	void ClearSelectRegion();
 	BOOL HasSelectRegion();
 
-	BOOL ResetClipRect();
-	BOOL SetClipRect(CRect* pRc);
-
 	// shape 
 	BOOL AddShape(IShape* pShape);
 	BOOL RemoveShape(IShape* pShape);
-
-protected:
-	BOOL InitClipRect();
 
 
 #ifdef _DEBUG
@@ -59,7 +57,6 @@ protected:
 	BOOL m_bHasSelectRegion;
 	CRect m_selectRegioon;
 	Image* m_pImage;
-	CRect m_clipRect;
 
 	std::vector<IShape*> m_shapePtrList;
 

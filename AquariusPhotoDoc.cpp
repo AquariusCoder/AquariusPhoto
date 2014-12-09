@@ -8,6 +8,10 @@
 #include "ToolManager.h"
 #include "MainFrm.h"
 #include <algorithm>
+#include "OperManager.h"
+#include "Element_Rotate.h"
+#include "Element_Clip.h"
+#include "Element_Open.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,7 +23,8 @@
 IMPLEMENT_DYNCREATE(CAquariusPhotoDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CAquariusPhotoDoc, CDocument)
-
+	//{{AFX_MSG_MAP(CAquariusPhotoDoc)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
@@ -51,8 +56,12 @@ BOOL CAquariusPhotoDoc::OnOpenDocument( LPCTSTR lpszPathName )
 
 	m_pImage = Image::FromFile(lpszPathName);
 
-	// set the ClipRect to the image rect
-	m_clipRect.SetRect(0, 0, m_pImage->GetWidth(), m_pImage->GetHeight());
+	// clear operations
+	COperManager::Instance()->Clear();
+	
+	// open operation
+	CElement_Open* pElem = new CElement_Open(m_pImage);
+	COperManager::Instance()->Add(pElem);
 
 	// update status bar -- image size
 	UpdateStatusBarImageSize();
@@ -92,8 +101,12 @@ void CAquariusPhotoDoc::Dump(CDumpContext& dc) const
 	CDocument::Dump(dc);
 }
 
-BOOL CAquariusPhotoDoc::Draw( Graphics* pGraphics )
+#endif //_DEBUG
+
+BOOL CAquariusPhotoDoc::Draw( Image* pImg )
 {
+	Graphics* pGraphics = Graphics::FromImage(pImg);
+
 	DrawImage(pGraphics);
 
 	DrawShape(pGraphics);
@@ -105,8 +118,12 @@ BOOL CAquariusPhotoDoc::Draw( Graphics* pGraphics )
 
 BOOL CAquariusPhotoDoc::DrawImage( Graphics* pGraphics )
 {
-	//pGraphics->DrawImage(m_pImage, 0, 0);
-	pGraphics->DrawImage(m_pImage, 0, 0, m_clipRect.left, m_clipRect.top, m_clipRect.Width(), m_clipRect.Height(), UnitPixel);
+	if (m_pImage == NULL)
+		return FALSE;
+
+	COperManager::Instance()->Do();
+
+	pGraphics->DrawImage(COperManager::Instance()->GetImage(), 0, 0);
 
 	return TRUE;
 }
@@ -157,7 +174,8 @@ BOOL CAquariusPhotoDoc::RotateImage(CView* pView, RotateFlipType type)
 	if (m_pImage == NULL)
 		return FALSE;
 
-	m_pImage->RotateFlip(type);
+	CElement_Rotate* pElem = new CElement_Rotate(type);
+	COperManager::Instance()->Add(pElem);
 
 	// Clear Select Region
 	ClearSelectRegion();
@@ -170,28 +188,6 @@ BOOL CAquariusPhotoDoc::RotateImage(CView* pView, RotateFlipType type)
 void CAquariusPhotoDoc::ClearSelectRegion()
 {
 	m_bHasSelectRegion = FALSE;
-}
-
-BOOL CAquariusPhotoDoc::InitClipRect()
-{
-	if (m_pImage == NULL)
-		return FALSE;
-
-	m_clipRect.SetRect(0, 0, m_pImage->GetWidth(), m_pImage->GetHeight());
-	
-	return TRUE;
-}
-
-BOOL CAquariusPhotoDoc::ResetClipRect()
-{
-	return InitClipRect();
-}
-
-BOOL CAquariusPhotoDoc::SetClipRect(CRect* pRc)
-{
-	m_clipRect = *pRc;
-
-	return TRUE;
 }
 
 BOOL CAquariusPhotoDoc::HasSelectRegion()
@@ -214,7 +210,11 @@ BOOL CAquariusPhotoDoc::GetDrawImageRect( CRect& rc )
 	if (!HasOpened())
 		return FALSE;
 
-	rc = m_clipRect;
+	Image* pImg = COperManager::Instance()->GetImage();
+	if (pImg == NULL)
+		return FALSE;
+
+	rc.SetRect(0, 0, pImg->GetWidth(), pImg->GetHeight());
 
 	return TRUE;
 }
@@ -226,8 +226,12 @@ BOOL CAquariusPhotoDoc::UpdateStatusBarImageSize()
 	if (!pPane)
 		return FALSE;
 
+	Image* pImg = COperManager::Instance()->GetImage();
+	if (pImg == NULL)
+		return FALSE;
+
 	CString str;
-	str.Format(_T("%d x %d ÏñËØ"), m_clipRect.Width(), m_clipRect.Height());
+	str.Format(_T("%d x %d ÏñËØ"), pImg->GetWidth(), pImg->GetHeight());
 
 	pPane->SetText((LPCTSTR)str);
 
@@ -273,9 +277,27 @@ BOOL CAquariusPhotoDoc::RemoveShape( IShape* pShape )
 	return FALSE;
 }
 
+BOOL CAquariusPhotoDoc::OnClip()
+{
+	CElement_Clip* pElem = new CElement_Clip(m_selectRegioon);
+	COperManager::Instance()->Add(pElem);
 
+	return TRUE;
+}
 
-#endif //_DEBUG
+void CAquariusPhotoDoc::OnRedo(CView* pView)
+{
+	COperManager::Instance()->ReDo();
+
+	pView->Invalidate(TRUE);
+}
+
+void CAquariusPhotoDoc::OnUndo(CView* pView)
+{
+	COperManager::Instance()->UnDo();
+
+	pView->Invalidate(TRUE);
+}
 
 
 // CAquariusPhotoDoc ÃüÁî

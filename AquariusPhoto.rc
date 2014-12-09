@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// Chinese (P.R.C.) resources
+// 中文(中华人民共和国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 #ifdef _WIN32
@@ -198,6 +198,7 @@ IDP_SELECT_REGION_16    PNG                     "res\\select_region_16.png"
 IDR_ROTATE_16           PNG                     "res\\rotate_16.png"
 IDR_GROUP_IMAGE         PNG                     "res\\group_image_16.png"
 ID_GALLERY_SHAPES       PNG                     "res\\GalleryShapes.png"
+IDR_QUICK_ACCESS        PNG                     "res\\quick_access_16x16.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -226,6 +227,7 @@ BEGIN
     END
     POPUP "&Edit"
     BEGIN
+        MENUITEM "&Redo\tCtrl+Z",               ID_EDIT_REDO
         MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
         MENUITEM SEPARATOR
         MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
@@ -434,7 +436,7 @@ BEGIN
     ID_SELECT_SHAPE         "选择图形"
 END
 
-#endif    // Chinese (P.R.C.) resources
+#endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

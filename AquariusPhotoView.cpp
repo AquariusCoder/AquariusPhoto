@@ -21,6 +21,9 @@ BEGIN_MESSAGE_MAP(CAquariusPhotoView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CView::OnFilePrintPreview)
 
+	ON_COMMAND(ID_EDIT_REDO, &CAquariusPhotoView::OnEditRedo)
+	ON_COMMAND(ID_EDIT_UNDO, &CAquariusPhotoView::OnEditUndo)
+
 	ON_COMMAND(ID_SELECT_REGION_RECT, &CAquariusPhotoView::OnSelectRegionRect)
 	ON_COMMAND(ID_SELECT_REGION_ANY, &CAquariusPhotoView::OnSelectRegionAny)
 
@@ -74,9 +77,7 @@ void CAquariusPhotoView::OnDraw(CDC* pDC)
 	
 	// double buffer
 	Bitmap bmp(rc.Width(), rc.Height());
-	Graphics* pGraphics = Graphics::FromImage(&bmp);
-	pDoc->Draw(pGraphics);
-	delete pGraphics;
+	pDoc->Draw(&bmp);
 
 	// start draw
 	Graphics graphics(pDC->m_hDC);
@@ -118,6 +119,8 @@ CAquariusPhotoDoc* CAquariusPhotoView::GetDocument() const // 非调试版本是内联的
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CAquariusPhotoDoc)));
 	return (CAquariusPhotoDoc*)m_pDocument;
 }
+
+#endif //_DEBUG
 
 void CAquariusPhotoView::OnSelectRegionRect()
 {
@@ -215,7 +218,7 @@ void CAquariusPhotoView::OnClipImage()
 	if (!pDoc->HasSelectRegion())
 		return;
 
-	pDoc->SetClipRect(&pDoc->GetSelectRegion());
+	pDoc->OnClip();
 	pDoc->ClearSelectRegion();
 
 	Invalidate(TRUE);
@@ -284,8 +287,27 @@ void CAquariusPhotoView::OnViewMenuCancelSelReg()
 	Invalidate(FALSE);
 }
 
+void CAquariusPhotoView::OnEditRedo()
+{
+	CAquariusPhotoDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if(!pDoc)
+		return;
 
-#endif //_DEBUG
+	pDoc->OnRedo(this);
+}
+
+void CAquariusPhotoView::OnEditUndo()
+{
+	CAquariusPhotoDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if(!pDoc)
+		return;
+
+	pDoc->OnUndo(this);
+}
+
+
 
 
 // CAquariusPhotoView 消息处理程序

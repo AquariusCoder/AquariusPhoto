@@ -203,11 +203,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Element_Clip.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Element_Open.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Element_Rotate.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Interface.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\MainFrm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\OperManager.cpp"
 				>
 			</File>
 			<File
@@ -265,6 +281,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OperManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Resource.h"
 				>
 			</File>
@@ -280,6 +300,22 @@
 				RelativePath=".\ToolManager.h"
 				>
 			</File>
+			<Filter
+				Name="Elements"
+				>
+				<File
+					RelativePath=".\Element_Clip.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Element_Open.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Element_Rotate.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -319,6 +355,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\quick_access_16x16.png"
+				>
+			</File>
+			<File
 				RelativePath=".\res\rotate_16.png"
 				>
 			</File>
@@ -331,10 +371,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

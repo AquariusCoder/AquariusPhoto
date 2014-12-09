@@ -49,6 +49,7 @@
 #define ID_INSERT_SHAPES                154
 #define IDR_MENU2                       155
 #define IDR_MENU_VIEW                   155
+#define IDR_QUICK_ACCESS                156
 #define ID_FILE_TEST                    32771
 #define ID_APP_CLOSE                    32771
 #define ID_TEST_SHOW                    32772
@@ -56,13 +57,14 @@
 #define ID_APP_OPTIONS                  32774
 #define ID_VIEW_32788                   32788
 #define ID_CANCEL_SEL_REGION            32789
+#define ID_EDIT_ID                      32790
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        156
-#define _APS_NEXT_COMMAND_VALUE         32790
+#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_COMMAND_VALUE         32791
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           112
 #endif

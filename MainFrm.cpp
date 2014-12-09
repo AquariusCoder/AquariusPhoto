@@ -132,13 +132,18 @@ void CMainFrame::Dump(CDumpContext& dc) const
 	CXTPFrameWnd::Dump(dc);
 }
 
+#endif //_DEBUG
+
 void CMainFrame::LoadIcons()
 {
 	CXTPCommandBars* pCommandBars = GetCommandBars();
 
 	pCommandBars->GetImageManager()->SetIcons(IDR_LARGE_ICONS);
 											  
-	
+	// Quick Access
+	UINT uiQuickAccess[] = { ID_FILE_SAVE, ID_EDIT_REDO, ID_EDIT_UNDO };
+	pCommandBars->GetImageManager()->SetIcons(IDR_QUICK_ACCESS, uiQuickAccess, _countof(uiQuickAccess), CSize(16, 16));
+
 	// Image Group
 	UINT uiSelectRegion[] = { ID_SELECT_REGION_RECT, ID_SELECT_REGION_ANY };
 	pCommandBars->GetImageManager()->SetIcons(IDP_SELECT_REGION_16, uiSelectRegion, _countof(uiSelectRegion), CSize(16, 16));
@@ -206,11 +211,13 @@ void CMainFrame::CreateRibbon()
 	pPopupBar->EnableAnimation();
 	pPopupBar->InternalRelease();
 
+	pRibbonBar->GetQuickAccessControls()->Add(xtpControlButton, ID_FILE_SAVE);
+	pRibbonBar->GetQuickAccessControls()->Add(xtpControlButton, ID_EDIT_UNDO);
+	pRibbonBar->GetQuickAccessControls()->Add(xtpControlButton, ID_EDIT_REDO);
+	pRibbonBar->GetQuickAccessControls()->CreateOriginalControls();
 
 	pRibbonBar->SetCloseable(FALSE);
-
 	pRibbonBar->EnableFrameTheme();
-
 	pRibbonBar->EnableCustomization(TRUE);
 
 }
@@ -427,9 +434,6 @@ CXTPStatusBar* CMainFrame::GetStatusBar()
 	return &m_wndStatusBar;
 }
 
-
-
-#endif //_DEBUG
 
 
 // CMainFrame 消息处理程序

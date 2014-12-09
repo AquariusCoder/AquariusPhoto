@@ -44,6 +44,9 @@ protected:
 	afx_msg virtual void OnMouseMove(UINT nFlages, CPoint point);
 	afx_msg virtual void OnRButtonDown(UINT nFlags, CPoint point);
 
+	afx_msg virtual void OnEditRedo();
+	afx_msg virtual void OnEditUndo();
+
 	afx_msg virtual void OnSelectRegionRect();
 	afx_msg virtual void OnSelectRegionAny();
 
