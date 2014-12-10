@@ -1,24 +1,20 @@
 #pragma once
 #include "Interface.h"
 
-class CTool_SelectRegion : public ITool
+class CTool_SelectRegion : public CToolBase
 {
 public:
 	CTool_SelectRegion(void);
 	~CTool_SelectRegion(void);
 
-public:
-	void AdjustPosition(CPoint& point, CRect& rc);
-
 // ITool
 public:
-	void OnLButtonDown(CView* pView, UINT nFlags, CPoint point);
-	void OnLButtonUp(CView* pView, UINT nFlages, CPoint point);
-	void OnMouseMove(CView* pView, UINT nFlages, CPoint point);
-	void OnLButtonDblClk(CView* pView, UINT nFlages, CPoint point);
+	virtual void OnLButtonDown(CView* pView, UINT nFlags, CPoint& point);
+	virtual void OnLButtonUp(CView* pView, UINT nFlages, CPoint& point);
+	virtual void OnMouseMove(CView* pView, UINT nFlages, CPoint& point);
+	virtual void OnLButtonDblClk(CView* pView, UINT nFlages, CPoint& point);
 
-protected:
-	BOOL m_bFirstDown;
-	CPoint m_firstPoint;
-	CPoint m_lastPoint;
+	virtual void OnActivate(CView* pView);
+	virtual void OnInactivate(CView* pView);
+
 };

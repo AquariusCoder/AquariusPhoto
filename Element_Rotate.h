@@ -2,7 +2,7 @@
 #include <Gdiplus.h>
 #include "Interface.h"
 
-class CElement_Rotate : public OperElementBase
+class CElement_Rotate : public COperElementBase
 {
 public:
 	CElement_Rotate(RotateFlipType type);

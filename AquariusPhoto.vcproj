@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Element_Draw_Line.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Element_Open.cpp"
 				>
 			</File>
@@ -247,7 +251,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Tool_DrawLine.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Tool_SelectRegion.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Tool_SelectShape.cpp"
 				>
 			</File>
 			<File
@@ -273,15 +285,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GeometryAlgorithm.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Interface.h"
 				>
 			</File>
 			<File
 				RelativePath=".\MainFrm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\OperManager.h"
 				>
 			</File>
 			<File
@@ -292,14 +304,6 @@
 				RelativePath=".\stdafx.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Tool_SelectRegion.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ToolManager.h"
-				>
-			</File>
 			<Filter
 				Name="Elements"
 				>
@@ -308,11 +312,39 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Element_Draw_Line.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Element_Open.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Element_Rotate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\OperManager.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Tools"
+				>
+				<File
+					RelativePath=".\Tool_DrawLine.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Tool_SelectRegion.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Tool_SelectShape.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ToolManager.h"
 					>
 				</File>
 			</Filter>

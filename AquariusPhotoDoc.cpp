@@ -12,10 +12,11 @@
 #include "Element_Rotate.h"
 #include "Element_Clip.h"
 #include "Element_Open.h"
+#include "GeometryAlgorithm.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+// #ifdef _DEBUG
+// #define new DEBUG_NEW
+// #endif
 
 
 // CAquariusPhotoDoc
@@ -34,10 +35,21 @@ CAquariusPhotoDoc::CAquariusPhotoDoc()
 {
 	m_pImage = NULL;
 	m_bHasSelectRegion = FALSE;
+
+	m_dynamicShape = NULL;
+
+	m_bFocusRect = FALSE;
+	m_pFocusPen = new Pen(Color::Gray);
+	m_pFocusPen->SetDashStyle(DashStyleDot);
 }
 
 CAquariusPhotoDoc::~CAquariusPhotoDoc()
 {
+	if(m_dynamicShape != NULL)
+	{
+		delete m_dynamicShape;
+		m_dynamicShape = NULL;
+	}
 }
 
 BOOL CAquariusPhotoDoc::OnNewDocument()
@@ -103,38 +115,27 @@ void CAquariusPhotoDoc::Dump(CDumpContext& dc) const
 
 #endif //_DEBUG
 
-BOOL CAquariusPhotoDoc::Draw( Image* pImg )
-{
-	Graphics* pGraphics = Graphics::FromImage(pImg);
-
-	DrawImage(pGraphics);
-
-	DrawShape(pGraphics);
-
-	DrawSelectRegion(pGraphics);
-
-	return TRUE;
-}
-
-BOOL CAquariusPhotoDoc::DrawImage( Graphics* pGraphics )
+BOOL CAquariusPhotoDoc::Draw( Graphics* pGraphics )
 {
 	if (m_pImage == NULL)
 		return FALSE;
 
+	// draw operation queue
 	COperManager::Instance()->Do();
-
 	pGraphics->DrawImage(COperManager::Instance()->GetImage(), 0, 0);
 
+	// draw select region
+	DrawSelectRegion(pGraphics);
+
+	// draw dynamic shape
+	if (m_dynamicShape != NULL)	
+		m_dynamicShape->DrawShape(pGraphics);
+
+	// draw focus Rect
+	if (m_bFocusRect)
+		pGraphics->DrawRectangle(m_pFocusPen, Rect(m_focusRect.left, m_focusRect.top, m_focusRect.Width(), m_focusRect.Height()));
+
 	return TRUE;
-}
-
-BOOL CAquariusPhotoDoc::DrawShape( Graphics* pGraphics )
-{
-	std::vector<IShape*>::iterator it = m_shapePtrList.begin();
-	for(; it != m_shapePtrList.end(); it++)
-		(*it)->DrawShape(pGraphics);
-
-	return FALSE;
 }
 
 BOOL CAquariusPhotoDoc::DrawSelectRegion( Graphics* pGraphics )
@@ -151,14 +152,7 @@ BOOL CAquariusPhotoDoc::DrawSelectRegion( Graphics* pGraphics )
 
 BOOL CAquariusPhotoDoc::SetSelectRegion( CPoint& p1, CPoint& p2 )
 {
-	if(p1.x < p2.x && p1.y < p2.y)
-		m_selectRegioon.SetRect(p1, p2);
-	else if (p1.x < p2.x && p1.y > p2.y)
-		m_selectRegioon.SetRect(p1.x, p2.y, p2.x, p1.y);
-	else if(p1.x > p2.x && p1.y < p2.y)
-		m_selectRegioon.SetRect(p2.x, p1.y, p1.x, p2.y);
-	else 
-		m_selectRegioon.SetRect(p2.x, p2.y, p1.x, p1.y);
+	::SetRectByPoint(p1.x, p1.y, p2.x, p2.y, m_selectRegioon);
 
 	m_bHasSelectRegion = TRUE;
 	return TRUE;
@@ -169,7 +163,7 @@ Image* CAquariusPhotoDoc::GetImage()
 	return m_pImage;
 }
 
-BOOL CAquariusPhotoDoc::RotateImage(CView* pView, RotateFlipType type)
+BOOL CAquariusPhotoDoc::OnRotateImage(CView* pView, RotateFlipType type)
 {
 	if (m_pImage == NULL)
 		return FALSE;
@@ -257,25 +251,7 @@ BOOL CAquariusPhotoDoc::UpdateStatusBarFileSize(LPCTSTR lpszPathName)
 	return TRUE;
 }
 
-BOOL CAquariusPhotoDoc::AddShape( IShape* pShape )
-{
-	m_shapePtrList.push_back(pShape);
 
-	return TRUE;
-}
-
-BOOL CAquariusPhotoDoc::RemoveShape( IShape* pShape )
-{
-	std::vector<IShape*>::iterator it = std::find(m_shapePtrList.begin(), m_shapePtrList.end(), pShape);
-	if(it != m_shapePtrList.end())
-	{
-		m_shapePtrList.erase(it);
-		delete pShape;
-		return TRUE;
-	}
-
-	return FALSE;
-}
 
 BOOL CAquariusPhotoDoc::OnClip()
 {
@@ -289,14 +265,36 @@ void CAquariusPhotoDoc::OnRedo(CView* pView)
 {
 	COperManager::Instance()->ReDo();
 
-	pView->Invalidate(TRUE);
+	pView->Invalidate(FALSE);
 }
 
 void CAquariusPhotoDoc::OnUndo(CView* pView)
 {
 	COperManager::Instance()->UnDo();
 
-	pView->Invalidate(TRUE);
+	pView->Invalidate(FALSE);
+}
+
+void CAquariusPhotoDoc::SetDynamicShape(IShape* pShap)
+{
+	if(m_dynamicShape != NULL)
+	{
+		m_dynamicShape->Erase();
+		m_dynamicShape = NULL;
+	}
+
+	m_dynamicShape = pShap;
+}
+
+void CAquariusPhotoDoc::SetFocusRect(CRect* pRect)
+{
+	if (pRect == NULL)
+		m_bFocusRect = FALSE;
+	else
+	{
+		m_bFocusRect = TRUE;
+		m_focusRect = *pRect;
+	}
 }
 
 

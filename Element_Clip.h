@@ -1,7 +1,7 @@
 #pragma once
 #include "Interface.h"
 
-class CElement_Clip : public OperElementBase
+class CElement_Clip : public COperElementBase
 {
 public:
 	CElement_Clip(CRect& rc);

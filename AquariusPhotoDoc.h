@@ -14,15 +14,12 @@ protected:
 	DECLARE_DYNCREATE(CAquariusPhotoDoc);	
 
 public:
+	BOOL Draw(Graphics* pGraphics);
+	BOOL DrawSelectRegion(Graphics* pGraphics);;
+
 	void OnRedo(CView* pView);
 	void OnUndo(CView* pView);
-
-	BOOL Draw(Image* pImg);
-	BOOL DrawSelectRegion(Graphics* pGraphics);
-	BOOL DrawImage(Graphics* pGraphics);
-	BOOL DrawShape(Graphics* pGraphics);
-
-	BOOL RotateImage(CView* pView, RotateFlipType type);
+	BOOL OnRotateImage(CView* pView, RotateFlipType type);
 	BOOL OnClip();
 
 	BOOL UpdateStatusBarImageSize();
@@ -44,9 +41,8 @@ public:
 	BOOL HasSelectRegion();
 
 	// shape 
-	BOOL AddShape(IShape* pShape);
-	BOOL RemoveShape(IShape* pShape);
-
+	void SetDynamicShape(IShape* pShap);
+	void SetFocusRect(CRect* pRect);
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -58,7 +54,11 @@ protected:
 	CRect m_selectRegioon;
 	Image* m_pImage;
 
-	std::vector<IShape*> m_shapePtrList;
+	IShape* m_dynamicShape;
+
+	BOOL m_bFocusRect;
+	CRect m_focusRect;
+	Pen* m_pFocusPen;
 
 protected:
 	DECLARE_MESSAGE_MAP()

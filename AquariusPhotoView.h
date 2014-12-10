@@ -59,9 +59,9 @@ protected:
 	afx_msg virtual void OnRotateHReverse();
 	afx_msg virtual void OnRotateVReverse();
 
+	afx_msg virtual void OnSelectShapeTool();
 	afx_msg virtual void OnViewMenuCancelSelReg();
 
-	afx_msg virtual void OnSelectShape();
 	afx_msg virtual void OnGalleryShapes(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg virtual void OnUpdateGalleryShapes(CCmdUI* pCmdUI);
 

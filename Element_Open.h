@@ -1,7 +1,7 @@
 #pragma once
 #include "Interface.h"
 
-class CElement_Open : public OperElementBase
+class CElement_Open : public COperElementBase
 {
 public:
 	CElement_Open(Image* pImg);

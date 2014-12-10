@@ -36,9 +36,9 @@ BEGIN_MESSAGE_MAP(CAquariusPhotoView, CView)
 	ON_COMMAND(ID_ROTATE_H_R, &CAquariusPhotoView::OnRotateHReverse)
 	ON_COMMAND(ID_ROTATE_V_R, &CAquariusPhotoView::OnRotateVReverse)
 
+	ON_COMMAND(ID_SELECT_SHAPE, &CAquariusPhotoView::OnSelectShapeTool)
 	ON_COMMAND(ID_CANCEL_SEL_REGION, &CAquariusPhotoView::OnViewMenuCancelSelReg)
 
-	ON_COMMAND(ID_SELECT_SHAPE, &CAquariusPhotoView::OnSelectShape)
 	ON_XTP_EXECUTE(ID_GALLERY_SHAPES, OnGalleryShapes)
 	ON_UPDATE_COMMAND_UI(ID_GALLERY_SHAPES, OnUpdateGalleryShapes)
 
@@ -77,7 +77,10 @@ void CAquariusPhotoView::OnDraw(CDC* pDC)
 	
 	// double buffer
 	Bitmap bmp(rc.Width(), rc.Height());
-	pDoc->Draw(&bmp);
+	Graphics* pGraphics = Graphics::FromImage(&bmp);
+	SolidBrush sBrush(Color::White);
+	pGraphics->FillRectangle(&sBrush, 0, 0, rc.Width(), rc.Height()); // erase the backgroud
+	pDoc->Draw(pGraphics);
 
 	// start draw
 	Graphics graphics(pDC->m_hDC);
@@ -124,12 +127,12 @@ CAquariusPhotoDoc* CAquariusPhotoView::GetDocument() const // 非调试版本是内联的
 
 void CAquariusPhotoView::OnSelectRegionRect()
 {
-	CToolManager::Instance()->SetToolMode(TM_SELECT_REGION_RECT);
+	CToolManager::Instance()->SetToolMode(this, TM_SELECT_REGION_RECT);
 }
 
 void CAquariusPhotoView::OnSelectRegionAny()
 {
-	CToolManager::Instance()->SetToolMode(TM_SELECT_REGION_RECT);
+	CToolManager::Instance()->SetToolMode(this, TM_SELECT_REGION_RECT);
 }
 
 void CAquariusPhotoView::OnRotateLeft()
@@ -139,7 +142,7 @@ void CAquariusPhotoView::OnRotateLeft()
 	if (!pDoc)
 		return;
 
-	pDoc->RotateImage(this, Rotate270FlipNone);
+	pDoc->OnRotateImage(this, Rotate270FlipNone);
 }
 
 void CAquariusPhotoView::OnRotateRight()
@@ -149,7 +152,7 @@ void CAquariusPhotoView::OnRotateRight()
 	if (!pDoc)
 		return;
 
-	pDoc->RotateImage(this, Rotate90FlipNone);
+	pDoc->OnRotateImage(this, Rotate90FlipNone);
 }
 
 void CAquariusPhotoView::OnRotate180()
@@ -159,7 +162,7 @@ void CAquariusPhotoView::OnRotate180()
 	if (!pDoc)
 		return;
 
-	pDoc->RotateImage(this, Rotate180FlipNone);
+	pDoc->OnRotateImage(this, Rotate180FlipNone);
 }
 
 void CAquariusPhotoView::OnRotateVReverse()
@@ -169,7 +172,7 @@ void CAquariusPhotoView::OnRotateVReverse()
 	if (!pDoc)
 		return;
 
-	pDoc->RotateImage(this, Rotate180FlipX);
+	pDoc->OnRotateImage(this, Rotate180FlipX);
 }
 
 void CAquariusPhotoView::OnRotateHReverse()
@@ -179,16 +182,18 @@ void CAquariusPhotoView::OnRotateHReverse()
 	if (!pDoc)
 		return;
 
-	pDoc->RotateImage(this, Rotate180FlipY);
+	pDoc->OnRotateImage(this, Rotate180FlipY);
 }
 
 void CAquariusPhotoView::OnLButtonDown( UINT nFlages, CPoint point )
 {
+	SetCapture();
 	CToolManager::Instance()->OnLButtonDown(this, nFlages, point);
 }
 
 void CAquariusPhotoView::OnLButtonUp( UINT nFlages, CPoint point )
 {
+	ReleaseCapture();
 	CToolManager::Instance()->OnLButtonUp(this, nFlages, point);
 }
 
@@ -229,11 +234,6 @@ void CAquariusPhotoView::OnResetSize()
 	
 }
 
-void CAquariusPhotoView::OnSelectShape()
-{
-
-}
-
 void CAquariusPhotoView::OnGalleryShapes( NMHDR* pNMHDR, LRESULT* pResult )
 {
 	NMXTPCONTROL* tagNMCONTROL = (NMXTPCONTROL*)pNMHDR;
@@ -246,6 +246,8 @@ void CAquariusPhotoView::OnGalleryShapes( NMHDR* pNMHDR, LRESULT* pResult )
 		if (pItem)
 		{
 			m_nShape = pItem->GetID();
+
+			CToolManager::Instance()->SetToolMode(this, TM_DRAW_LINE);
 		}
 
 		*pResult = TRUE; // Handled
@@ -305,6 +307,11 @@ void CAquariusPhotoView::OnEditUndo()
 		return;
 
 	pDoc->OnUndo(this);
+}
+
+void CAquariusPhotoView::OnSelectShapeTool()
+{
+	CToolManager::Instance()->SetToolMode(this, TM_SELECT_SHAPE);
 }
 
 

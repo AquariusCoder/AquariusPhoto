@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "ToolManager.h"
 #include "Tool_SelectRegion.h"
+#include "Tool_DrawLine.h"
+#include "Tool_SelectShape.h"
 
 CToolManager g_toolManager;
 
@@ -8,6 +10,15 @@ CToolManager::CToolManager(void)
 {
 	CTool_SelectRegion* pToolSelectRegion = new CTool_SelectRegion();
 	m_toolPtrList.push_back(pToolSelectRegion);
+
+	CTool_SelectRegion* pToolSelectRegionAny = new CTool_SelectRegion();
+	m_toolPtrList.push_back(pToolSelectRegionAny);
+
+	CTool_SelectShape* pToolSelectShape = new CTool_SelectShape();
+	m_toolPtrList.push_back(pToolSelectShape);
+
+	CTool_DrawLine* pToolDrawLine = new CTool_DrawLine();
+	m_toolPtrList.push_back(pToolDrawLine);
 
 	m_currentTool = TM_NONE;
 }
@@ -22,9 +33,15 @@ CToolManager::~CToolManager(void)
 	}
 }
 
-void CToolManager::SetToolMode( enum_Tool_Mode mode )
+void CToolManager::SetToolMode( CView* pView, enum_Tool_Mode mode )
 {
+	std::vector<ITool*>::iterator it;
+	for(it = m_toolPtrList.begin(); it != m_toolPtrList.end(); it++)
+		(*it)->OnInactivate(pView);
+
 	m_currentTool = mode;
+	
+	GetCurrentTool()->OnActivate(pView);
 }
 
 enum_Tool_Mode CToolManager::GetCurrentToolMode()
@@ -45,7 +62,7 @@ ITool* CToolManager::GetCurrentTool()
 	return m_toolPtrList[m_currentTool];
 }
 
-void CToolManager::OnLButtonDown( CView* pView, UINT nFlags, CPoint point )
+void CToolManager::OnLButtonDown( CView* pView, UINT nFlags, CPoint& point )
 {
 	ITool* pTool = GetCurrentTool();
 	if (pTool == NULL)
@@ -54,7 +71,7 @@ void CToolManager::OnLButtonDown( CView* pView, UINT nFlags, CPoint point )
 	pTool->OnLButtonDown(pView, nFlags, point);
 }
 
-void CToolManager::OnLButtonUp( CView* pView, UINT nFlags, CPoint point )
+void CToolManager::OnLButtonUp( CView* pView, UINT nFlags, CPoint& point )
 {
 	ITool* pTool = GetCurrentTool();
 	if (pTool == NULL)
@@ -63,7 +80,7 @@ void CToolManager::OnLButtonUp( CView* pView, UINT nFlags, CPoint point )
 	pTool->OnLButtonUp(pView, nFlags, point);
 }
 
-void CToolManager::OnMouseMove( CView* pView, UINT nFlags, CPoint point )
+void CToolManager::OnMouseMove( CView* pView, UINT nFlags, CPoint& point )
 {
 	ITool* pTool = GetCurrentTool();
 	if (pTool == NULL)
@@ -72,7 +89,7 @@ void CToolManager::OnMouseMove( CView* pView, UINT nFlags, CPoint point )
 	pTool->OnMouseMove(pView, nFlags, point);
 }
 
-void CToolManager::OnLButtonDblClk( CView* pView, UINT nFlags, CPoint point )
+void CToolManager::OnLButtonDblClk( CView* pView, UINT nFlags, CPoint& point )
 {
 	ITool* pTool = GetCurrentTool();
 	if (pTool == NULL)
