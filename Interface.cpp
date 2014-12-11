@@ -111,6 +111,8 @@ CShapeBase::CShapeBase(void)
 {
 	m_bErased = FALSE;
 	m_bSelected = FALSE;
+	m_bChanged = FALSE;
+	m_pParent = NULL;
 	m_nHandleInflate = 3;
 	m_pHandlePen = new Pen(Color::Black, 1);
 	m_pHandleBrush = new SolidBrush(Color::White);
@@ -159,4 +161,35 @@ BOOL CShapeBase::DrawHandle(Graphics* pGraphics)
 	}
 	return TRUE;
 }
+
+void CShapeBase::Transform(Matrix& mt)
+{
+	int nCount = GetHandleCount();
+	CPoint* pPoint = NULL;
+	for (int i = 0; i < nCount; i++)
+	{
+		GetHandlePtr(i, &pPoint);
+		Point pos(pPoint->x, pPoint->y);
+		mt.TransformPoints(&pos);
+
+		pPoint->x = pos.X;
+		pPoint->y = pos.Y;
+	}
+}
+
+BOOL CShapeBase::IsChanged()
+{
+	return m_bChanged;
+}
+
+void CShapeBase::SetChanged(BOOL bChanged)
+{
+	m_bChanged = bChanged;
+}
+
+IShape* CShapeBase::GetParent()
+{
+	return m_pParent;
+}
+
 

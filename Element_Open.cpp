@@ -19,3 +19,13 @@ BOOL CElement_Open::Do(Image** ppImg)
 
 	return TRUE;
 }
+
+void CElement_Open::OnReDo()
+{
+
+}
+
+void CElement_Open::OnUnDo()
+{
+
+}

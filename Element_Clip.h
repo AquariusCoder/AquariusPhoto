@@ -9,6 +9,8 @@ public:
 
 public:
 	virtual BOOL Do(Image** ppImg);
+	virtual void OnReDo();
+	virtual void OnUnDo();
 
 protected:
 	CRect m_rc;

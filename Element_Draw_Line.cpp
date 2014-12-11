@@ -16,7 +16,9 @@ BOOL CElement_Draw_Line::Do(Image** ppImg)
 {
 	Graphics* pGraphics = Graphics::FromImage(*ppImg);
 
-	DrawShape(pGraphics);
+	// do not draw when changed
+	if(!IsChanged())
+		DrawShape(pGraphics);
 
 	delete pGraphics;
 
@@ -98,3 +100,46 @@ void CElement_Draw_Line::Erase(BOOL bErase /*= TRUE*/)
 		m_bErased = TRUE;
 }
 
+IShape* CElement_Draw_Line::Clone()
+{
+	CElement_Draw_Line* pClone = new CElement_Draw_Line(m_p1, m_p2);
+	pClone->m_bErased = m_bErased;
+	pClone->m_bSelected = m_bSelected;
+	pClone->m_bChanged = m_bChanged;
+	//pClone->m_pParent = m_pParent;
+	pClone->m_nHandleInflate = m_nHandleInflate;
+	//*pClone->m_pHandleBrush = *m_pHandleBrush;
+	//*pClone->m_pHandlePen = *m_pHandlePen;
+
+	pClone->m_pParent = this;
+
+	return pClone;
+}
+
+BOOL CElement_Draw_Line::GetHandlePtr(int nIndex, CPoint** ppHandle)
+{
+	*ppHandle = NULL;
+
+	if (nIndex == 0)
+		*ppHandle = &m_p1;
+	else if (nIndex == 1)
+		*ppHandle = &m_p2;
+	else
+		return FALSE;
+
+	return TRUE;
+}
+
+void CElement_Draw_Line::OnReDo()
+{
+	IShape* pParent = this->GetParent();
+	if (pParent != NULL)
+		pParent->SetChanged(TRUE);
+}
+
+void CElement_Draw_Line::OnUnDo()
+{
+	IShape* pParent = this->GetParent();
+	if (pParent != NULL)
+		pParent->SetChanged(FALSE);
+}

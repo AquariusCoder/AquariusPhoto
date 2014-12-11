@@ -20,3 +20,13 @@ BOOL CElement_Clip::Do(Image** ppImg)
 
 	return TRUE;
 }
+
+void CElement_Clip::OnReDo()
+{
+
+}
+
+void CElement_Clip::OnUnDo()
+{
+
+}

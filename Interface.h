@@ -47,9 +47,16 @@ interface IShape
 
 	virtual int GetHandleCount() = 0;
 	virtual BOOL GetHandle(int nIndex, CPoint& pos) = 0;
+	virtual BOOL GetHandlePtr(int nIndex, CPoint** ppHandle) = 0;
 
 	virtual BOOL GetEnvelope(CRect& rc) = 0;
 	virtual BOOL GetHandleRect(int nIndex, CRect& rc) = 0;
+
+	virtual IShape* Clone() = 0;
+	virtual IShape* GetParent() = 0;
+	virtual void Transform(Matrix& mt) = 0;
+	virtual BOOL IsChanged() = 0;
+	virtual void SetChanged(BOOL bChanged) = 0;
 };
 
 class CShapeBase : public IShape
@@ -72,13 +79,22 @@ public:
 
 	virtual int GetHandleCount() = 0;
 	virtual BOOL GetHandle(int nIndex, CPoint& pos) = 0;
+	virtual BOOL GetHandlePtr(int nIndex, CPoint** ppHandle) = 0;
 
 	virtual BOOL GetEnvelope(CRect& rc) = 0;
 	virtual BOOL GetHandleRect(int nIndex, CRect& rc) = 0;
 
+	virtual IShape* Clone() = 0;
+	virtual IShape* GetParent();
+	virtual void Transform(Matrix& mt);
+	virtual BOOL IsChanged();
+	virtual void SetChanged(BOOL bChanged);
+
 protected:
 	BOOL m_bErased;
 	BOOL m_bSelected;
+	BOOL m_bChanged;
+	IShape* m_pParent;
 	int m_nHandleInflate;
 	SolidBrush* m_pHandleBrush;
 	Pen* m_pHandlePen;
@@ -90,6 +106,8 @@ protected:
 interface IOperElement
 {
 	virtual BOOL Do(Image** ppImg) = 0;
+	virtual void OnReDo() = 0;
+	virtual void OnUnDo() = 0;
 	virtual IOperElement* Prev() = 0;
 	virtual IOperElement* Next() = 0;
 
@@ -105,6 +123,8 @@ public:
 	COperElementBase(void);
 
 	virtual BOOL Do(Image** ppImg) = 0;
+	virtual void OnReDo() = 0;
+	virtual void OnUnDo() = 0;
 	virtual IOperElement* Prev();
 	virtual IOperElement* Next();
 

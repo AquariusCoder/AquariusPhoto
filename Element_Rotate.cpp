@@ -18,3 +18,13 @@ BOOL CElement_Rotate::Do(Image** ppImg)
 	return TRUE;
 }
 
+void CElement_Rotate::OnReDo()
+{
+
+}
+
+void CElement_Rotate::OnUnDo()
+{
+
+}
+

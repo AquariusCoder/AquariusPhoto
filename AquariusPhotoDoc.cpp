@@ -36,8 +36,6 @@ CAquariusPhotoDoc::CAquariusPhotoDoc()
 	m_pImage = NULL;
 	m_bHasSelectRegion = FALSE;
 
-	m_dynamicShape = NULL;
-
 	m_bFocusRect = FALSE;
 	m_pFocusPen = new Pen(Color::Gray);
 	m_pFocusPen->SetDashStyle(DashStyleDot);
@@ -45,11 +43,7 @@ CAquariusPhotoDoc::CAquariusPhotoDoc()
 
 CAquariusPhotoDoc::~CAquariusPhotoDoc()
 {
-	if(m_dynamicShape != NULL)
-	{
-		delete m_dynamicShape;
-		m_dynamicShape = NULL;
-	}
+	ClearDynamicShape();
 }
 
 BOOL CAquariusPhotoDoc::OnNewDocument()
@@ -128,8 +122,9 @@ BOOL CAquariusPhotoDoc::Draw( Graphics* pGraphics )
 	DrawSelectRegion(pGraphics);
 
 	// draw dynamic shape
-	if (m_dynamicShape != NULL)	
-		m_dynamicShape->DrawShape(pGraphics);
+	std::vector<IShape*>::iterator it = m_dynamicShapeList.begin();
+	for(; it != m_dynamicShapeList.end(); it++)
+		(*it)->DrawShape(pGraphics);
 
 	// draw focus Rect
 	if (m_bFocusRect)
@@ -277,13 +272,26 @@ void CAquariusPhotoDoc::OnUndo(CView* pView)
 
 void CAquariusPhotoDoc::SetDynamicShape(IShape* pShap)
 {
-	if(m_dynamicShape != NULL)
-	{
-		m_dynamicShape->Erase();
-		m_dynamicShape = NULL;
-	}
+	ClearDynamicShape();	
 
-	m_dynamicShape = pShap;
+	m_dynamicShapeList.push_back(pShap);
+}
+
+void CAquariusPhotoDoc::SetDynamicShape(std::vector<IShape*> vec)
+{
+	ClearDynamicShape();
+	std::vector<IShape*>::iterator it = vec.begin();
+	for(; it != vec.end(); it++)
+		m_dynamicShapeList.push_back(*it);
+}
+
+void CAquariusPhotoDoc::ClearDynamicShape()
+{
+	std::vector<IShape*>::iterator it = m_dynamicShapeList.begin();
+	for(; it != m_dynamicShapeList.end(); it++)
+		(*it)->Erase();
+
+	m_dynamicShapeList.clear();
 }
 
 void CAquariusPhotoDoc::SetFocusRect(CRect* pRect)
@@ -296,6 +304,7 @@ void CAquariusPhotoDoc::SetFocusRect(CRect* pRect)
 		m_focusRect = *pRect;
 	}
 }
+
 
 
 // CAquariusPhotoDoc √¸¡Ó

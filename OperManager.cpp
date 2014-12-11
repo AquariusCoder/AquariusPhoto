@@ -79,13 +79,19 @@ void COperManager::push_back(IOperElement* pElem)
 void COperManager::ReDo()
 {
 	if (m_pIndex != NULL && m_pIndex->Next() != NULL)
+	{
 		m_pIndex = m_pIndex->Next();
+		m_pIndex->OnReDo();
+	}
 }
 
 void COperManager::UnDo()
 {
 	if (m_pIndex != NULL && m_pIndex->Prev() != NULL)
+	{
+		m_pIndex->OnUnDo();
 		m_pIndex = m_pIndex->Prev();
+	}
 }
 
 void COperManager::Do()
@@ -112,6 +118,21 @@ void COperManager::Clear()
 Image* COperManager::GetImage()
 {
 	return m_pImg;
+}
+
+void COperManager::GetShapes(std::vector<IShape*>& vec)
+{
+	vec.clear();
+
+	IOperElement* pIndex = m_pOperElemList;
+	while(pIndex != NULL)
+	{
+		IShape* pShape = dynamic_cast<IShape*>(pIndex);
+		if (pShape != NULL)
+			vec.push_back(pShape);
+
+		pIndex = pIndex->Next();
+	}
 }
 
 

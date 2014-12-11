@@ -33,13 +33,12 @@ void CTool_DrawLine::OnLButtonUp(CView* pView, UINT nFlages, CPoint& point)
 	ITool* pTool = CToolManager::Instance()->GetTool(TM_SELECT_SHAPE);
 	ASSERT(pTool != NULL);
 	CTool_SelectShape* pToolSelShape = static_cast<CTool_SelectShape*>(pTool);
-	pToolSelShape->AddShape(pElem);
 
-	// enable dynamic shape
+	// clear dynamic shape
 	CAquariusPhotoDoc* pDoc = dynamic_cast<CAquariusPhotoDoc *>(pView->GetDocument());
 	ASSERT(pDoc);
 
-	pDoc->SetDynamicShape(NULL);
+	pDoc->ClearDynamicShape();
 
 	pView->Invalidate(FALSE);
 }

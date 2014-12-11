@@ -1,5 +1,6 @@
 #pragma once
 #include "Interface.h"
+#include <vector>
 
 class COperManager
 {
@@ -17,6 +18,8 @@ public:
 
 	void Do();
 	void Clear();
+
+	void GetShapes(std::vector<IShape*>& vec);
 
 protected:
 	void push_back(IOperElement* pElem);

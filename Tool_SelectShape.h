@@ -2,6 +2,15 @@
 #include "Interface.h"
 #include <vector>
 
+enum enum_Sel_Tool_Status
+{
+	STS_NONE = -1,
+	STS_SEL_POINT = 0,
+	STS_SEL_RECT,
+	STS_SHP_MOVE,
+	STS_SHP_CHANGE,
+};
+
 class CTool_SelectShape : public CToolBase
 {
 public:
@@ -20,13 +29,13 @@ public:
 
 // shape
 public:
-	virtual void AddShape(IShape* pShape);
 	virtual void SetSelectShape(CPoint& point);
 	virtual void SetSelectShape(CRect& rc);
 
 protected:
 	void ClearSelect();
+	int GetSelectedShape(std::vector<IShape*>& vec);
 
 protected:
-	std::vector<IShape*> m_shapePtrList;
+	enum_Sel_Tool_Status m_status;
 };

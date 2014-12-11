@@ -10,6 +10,8 @@ public:
 // OperElementBase
 public:
 	virtual BOOL Do(Image** ppImg);
+	virtual void OnReDo();
+	virtual void OnUnDo();
 
 	Image* m_pImg;
 };

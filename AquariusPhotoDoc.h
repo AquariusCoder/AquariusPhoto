@@ -42,6 +42,8 @@ public:
 
 	// shape 
 	void SetDynamicShape(IShape* pShap);
+	void SetDynamicShape(std::vector<IShape*> vec);
+	void ClearDynamicShape();
 	void SetFocusRect(CRect* pRect);
 
 #ifdef _DEBUG
@@ -54,7 +56,7 @@ protected:
 	CRect m_selectRegioon;
 	Image* m_pImage;
 
-	IShape* m_dynamicShape;
+	std::vector<IShape*> m_dynamicShapeList;
 
 	BOOL m_bFocusRect;
 	CRect m_focusRect;
