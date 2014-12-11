@@ -18,6 +18,7 @@ public:
 	virtual BOOL DrawShape(Graphics* pGraphics);
 	virtual void Erase(BOOL bErase = TRUE);
 	virtual BOOL HitTest(CPoint& pos);
+	virtual BOOL HitTest(CRect& rc);
 	virtual int GetHandleCount();
 	virtual BOOL GetHandle(int nIndex, CPoint& pos);
 	virtual BOOL GetHandlePtr(int nIndex, CPoint** ppHandle);

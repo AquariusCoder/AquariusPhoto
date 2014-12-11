@@ -131,6 +131,9 @@ void COperManager::GetShapes(std::vector<IShape*>& vec)
 		if (pShape != NULL)
 			vec.push_back(pShape);
 
+		if(pIndex->GetID() == m_pIndex->GetID())
+			break;
+
 		pIndex = pIndex->Next();
 	}
 }

@@ -7,6 +7,7 @@ enum enum_Sel_Tool_Status
 	STS_NONE = -1,
 	STS_SEL_POINT = 0,
 	STS_SEL_RECT,
+	STS_SHP_MOVE_READY,
 	STS_SHP_MOVE,
 	STS_SHP_CHANGE,
 };

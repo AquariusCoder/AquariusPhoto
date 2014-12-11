@@ -192,4 +192,10 @@ IShape* CShapeBase::GetParent()
 	return m_pParent;
 }
 
+BOOL CShapeBase::IsCanHitTest()
+{
+	// no see no hit
+	return (IsChanged() || IsErased()) ? FALSE : TRUE;
+}
+
 

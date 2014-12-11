@@ -39,9 +39,22 @@ BOOL CElement_Draw_Line::DrawShape(Graphics* pGraphics)
 
 BOOL CElement_Draw_Line::HitTest(CPoint& pos)
 {
+	if(!IsCanHitTest())
+		return FALSE;
+
 	CRgn rgn;
 	::GetLineBounds(rgn, m_p1, m_p2, m_penwidth);
 	return rgn.PtInRegion(pos);
+}
+
+BOOL CElement_Draw_Line::HitTest(CRect& rc)
+{
+	if(!IsCanHitTest())
+		return FALSE;
+
+	CRect rcShape;
+	GetEnvelope(rcShape);
+	return (rc.PtInRect(rcShape.TopLeft()) && rc.PtInRect(rcShape.BottomRight()));
 }
 
 BOOL CElement_Draw_Line::GetEnvelope(CRect& rc)
@@ -53,6 +66,9 @@ BOOL CElement_Draw_Line::GetEnvelope(CRect& rc)
 
 int CElement_Draw_Line::HandleHitTest(CPoint& pos)
 {
+	if(!IsCanHitTest())
+		return -1;
+
 	CRect rc;
 	GetHandleRect(0, rc);
 	if (::PtInRect(rc, pos))

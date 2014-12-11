@@ -58,9 +58,9 @@ void CTool_SelectShape::OnLButtonUp(CView* pView, UINT nFlages, CPoint& point)
 				pClone->SetChanged(FALSE);
 				pClone->SetSelected(TRUE);
 				pClone->Transform(mt);
-				// add operation element
 				pClone->GetParent()->SetChanged(TRUE);
 				pClone->GetParent()->SetSelected(FALSE);
+				// add operation element
 				IOperElement* pElem = dynamic_cast<IOperElement*>(pClone);
 				ASSERT(pElem);
 				COperManager::Instance()->Add(pElem);
@@ -89,6 +89,9 @@ void CTool_SelectShape::OnMouseMove(CView* pView, UINT nFlages, CPoint& point)
 	if (m_status == STS_NONE || m_status == STS_SEL_POINT)
 		m_status = STS_SEL_RECT;
 
+	if (m_status == STS_SHP_MOVE_READY)
+		m_status = STS_SHP_MOVE;
+
 	switch(m_status)
 	{
 	case STS_NONE:
@@ -114,7 +117,10 @@ void CTool_SelectShape::OnMouseMove(CView* pView, UINT nFlages, CPoint& point)
 			{
 				IShape* pShape = *it;
 				IShape* pClone = pShape->Clone();
+				pClone->SetChanged(FALSE);
+				pClone->SetSelected(TRUE);
 				pClone->GetParent()->SetChanged(TRUE);
+				//pClone->GetParent()->SetSelected(FALSE);
 				pClone->Transform(mt);
 				vecClone.push_back(pClone);
 			}
@@ -157,14 +163,22 @@ void CTool_SelectShape::OnLButtonDown(CView* pView, UINT nFlags, CPoint& point)
 		}
 		else if(pShape->HitTest(point))
 		{
-			m_status = STS_SHP_MOVE;
+			m_status = STS_SHP_MOVE_READY;
 			// TODO set cursor
 		}
 
 	}
 	else 
 	{
-		m_status = STS_SHP_MOVE;
+		std::vector<IShape*>::iterator it = vec.begin();
+		for (; it != vec.end(); it++)
+		{
+			if((*it)->HitTest(point))
+			{
+				m_status = STS_SHP_MOVE_READY;
+				break;
+			}
+		}
 	}
 
 }
@@ -178,6 +192,8 @@ void CTool_SelectShape::SetSelectShape(CPoint& point)
 	for (; it != vec.end(); it++)
 	{
 		IShape* pShape = *it;
+		ASSERT(pShape);
+
 		if(pShape->HitTest(point))
 			pShape->SetSelected(TRUE);
 	}
@@ -185,7 +201,6 @@ void CTool_SelectShape::SetSelectShape(CPoint& point)
 
 void CTool_SelectShape::SetSelectShape(CRect& rc)
 {
-	CRect rcShape;
 	std::vector<IShape*> vec;
 	COperManager::Instance()->GetShapes(vec);
 	std::vector<IShape*>::iterator it = vec.begin();
@@ -194,8 +209,7 @@ void CTool_SelectShape::SetSelectShape(CRect& rc)
 		IShape* pShape = *it;
 		ASSERT(pShape);
 
-		pShape->GetEnvelope(rcShape);
-		if (rc.PtInRect(rcShape.TopLeft()) && rc.PtInRect(rcShape.BottomRight()))
+		if(pShape->HitTest(rc))
 			pShape->SetSelected(TRUE);
 	}
 }
@@ -231,6 +245,9 @@ int CTool_SelectShape::GetSelectedShape(std::vector<IShape*>& vec)
 	{
 		IShape* pShape = *it;
 		ASSERT(pShape);
+
+		if (pShape->IsErased()) // no see no select
+			continue;
 
 		if(pShape->IsSelected())
 			vec.push_back(pShape);

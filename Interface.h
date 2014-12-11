@@ -43,6 +43,7 @@ interface IShape
 	virtual BOOL IsSelected() = 0;
 
 	virtual BOOL HitTest(CPoint& pos) = 0;
+	virtual BOOL HitTest(CRect& rc) = 0;
 	virtual int HandleHitTest(CPoint& pos) = 0;
 
 	virtual int GetHandleCount() = 0;
@@ -75,6 +76,7 @@ public:
 	virtual BOOL IsSelected();
 
 	virtual BOOL HitTest(CPoint& pos) = 0;
+	virtual BOOL HitTest(CRect& rc) = 0;
 	virtual int HandleHitTest(CPoint& pos) = 0;
 
 	virtual int GetHandleCount() = 0;
@@ -89,6 +91,9 @@ public:
 	virtual void Transform(Matrix& mt);
 	virtual BOOL IsChanged();
 	virtual void SetChanged(BOOL bChanged);
+
+protected:
+	virtual BOOL IsCanHitTest();
 
 protected:
 	BOOL m_bErased;
