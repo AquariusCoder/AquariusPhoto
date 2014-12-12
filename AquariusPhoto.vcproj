@@ -215,6 +215,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Element_Package.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Element_Rotate.cpp"
 				>
 			</File>
@@ -317,6 +321,10 @@
 				</File>
 				<File
 					RelativePath=".\Element_Open.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Element_Package.h"
 					>
 				</File>
 				<File

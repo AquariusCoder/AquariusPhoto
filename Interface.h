@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 interface ITool
 {
@@ -142,4 +143,38 @@ protected:
 	int m_nID;
 	IOperElement* m_prev;
 	IOperElement* m_next;
+};
+
+interface IOperQueue
+{
+	virtual void Add(IOperElement* pElem) = 0;
+	virtual BOOL Remove(IOperElement* pElem) = 0;
+	virtual BOOL Remove(int nIndex) = 0;
+	virtual void Clear() = 0;
+	virtual int GetCount() = 0;
+	virtual int GetValidCount() = 0;
+	virtual void GetShapes(std::vector<IShape*>& vec) = 0;
+};
+
+class COperQueueBase : public IOperQueue
+{
+public:
+	COperQueueBase(void);
+	~COperQueueBase(void);
+
+	virtual void Add(IOperElement* pElem);
+	virtual BOOL Remove(IOperElement* pElem);
+	virtual BOOL Remove(int nIndex);
+	virtual void Clear();
+	virtual int GetCount();
+	virtual int GetValidCount();
+	virtual void GetShapes(std::vector<IShape*>& vec);
+
+protected:
+	virtual void push_back(IOperElement* pElem);
+	virtual void Free(IOperElement* pElem);
+
+protected:
+	IOperElement* m_pIndex;
+	IOperElement* m_pOperElemList;
 };

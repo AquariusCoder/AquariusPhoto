@@ -3,6 +3,7 @@
 #include "GeometryAlgorithm.h"
 #include "AquariusPhotoDoc.h"
 #include "OperManager.h"
+#include "Element_Package.h"
 
 CTool_SelectShape::CTool_SelectShape(void)
 {
@@ -49,6 +50,7 @@ void CTool_SelectShape::OnLButtonUp(CView* pView, UINT nFlages, CPoint& point)
 			std::vector<IShape*> vec;
 			GetSelectedShape(vec);
 			std::vector<IShape*>::iterator it = vec.begin();
+			CElement_Package* pPackage = new CElement_Package();
 			Matrix mt(1.0f, 0.0f, 0.0f, 1.0f,(REAL)(m_lastPoint.x - m_firstPoint.x), (REAL)(m_lastPoint.y - m_firstPoint.y));
 			for(; it != vec.end(); it++)
 			{
@@ -63,8 +65,12 @@ void CTool_SelectShape::OnLButtonUp(CView* pView, UINT nFlages, CPoint& point)
 				// add operation element
 				IOperElement* pElem = dynamic_cast<IOperElement*>(pClone);
 				ASSERT(pElem);
-				COperManager::Instance()->Add(pElem);
+
+				pPackage->Add(pElem);
 			}
+
+			if (pPackage->GetValidCount() > 0)
+				COperManager::Instance()->Add(pPackage);
 		}
 		break;
 	case STS_SHP_CHANGE:

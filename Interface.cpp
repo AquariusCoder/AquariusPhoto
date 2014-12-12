@@ -198,4 +198,133 @@ BOOL CShapeBase::IsCanHitTest()
 	return (IsChanged() || IsErased()) ? FALSE : TRUE;
 }
 
+COperQueueBase::COperQueueBase(void)
+{
+	m_pIndex = NULL;
+	m_pOperElemList = NULL;
+}
 
+COperQueueBase::~COperQueueBase(void)
+{
+	Free(m_pOperElemList);
+}
+
+void COperQueueBase::Add(IOperElement* pElem)
+{
+	if (m_pOperElemList == NULL)
+		m_pOperElemList = pElem;
+	else
+		push_back(pElem);
+
+	m_pIndex = pElem;
+}
+
+void COperQueueBase::push_back(IOperElement* pElem)
+{
+	// free first
+	if (m_pIndex != NULL)
+		Free(m_pIndex->Next());
+
+	// push back
+	IOperElement* pIndex = m_pOperElemList;
+	while(pIndex != NULL)
+	{
+		if (pIndex->Next() == NULL)
+		{
+			pIndex->SetNext(pElem);
+			pElem->SetPrev(pIndex);
+
+			break;
+		}
+
+		pIndex = pIndex->Next();
+	}
+}
+
+BOOL COperQueueBase::Remove(IOperElement* pElem)
+{
+	return FALSE;
+}
+
+BOOL COperQueueBase::Remove(int nIndex)
+{
+	return FALSE;
+}
+
+void COperQueueBase::Clear()
+{
+	Free(m_pOperElemList);
+
+	m_pOperElemList = NULL;
+}
+
+void COperQueueBase::Free(IOperElement* pElem)
+{
+	if (pElem == NULL)
+		return;
+
+	// set prev's next null
+	if (pElem->Prev() != NULL)
+		pElem->Prev()->SetNext(NULL);
+
+	// free last
+	IOperElement* pIndex = pElem;
+	while(pIndex != NULL)
+	{
+		IOperElement* pDel = pIndex;
+		pIndex = pIndex->Next();
+
+		delete pDel;
+	}
+}
+
+int COperQueueBase::GetCount()
+{
+	int nCount = 0;
+	IOperElement* pIndex = m_pOperElemList;
+	while(pIndex != NULL)
+	{
+		nCount++;
+
+		pIndex = pIndex->Next();
+	}
+
+	return nCount;
+}
+
+int COperQueueBase::GetValidCount()
+{
+	int nCount = 0;
+	IOperElement* pIndex = m_pOperElemList;
+	while(pIndex != NULL)
+	{
+		nCount++;
+
+		if(pIndex->GetID() == m_pIndex->GetID())
+			break;
+
+		pIndex = pIndex->Next();
+	}
+	
+	return nCount;
+}
+
+void COperQueueBase::GetShapes(std::vector<IShape*>& vec)
+{
+	IOperElement* pIndex = m_pOperElemList;
+	while(pIndex != NULL)
+	{
+		IShape* pShape = dynamic_cast<IShape*>(pIndex);
+		if (pShape != NULL)
+			vec.push_back(pShape);
+
+		IOperQueue* pQueue = dynamic_cast<IOperQueue*>(pIndex);
+		if(pQueue != NULL)
+			pQueue->GetShapes(vec);
+
+		if(pIndex->GetID() == m_pIndex->GetID())
+			break;
+
+		pIndex = pIndex->Next();
+	}
+}
