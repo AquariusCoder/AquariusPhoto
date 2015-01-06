@@ -59,6 +59,9 @@ interface IShape
 	virtual void Transform(Matrix& mt) = 0;
 	virtual BOOL IsChanged() = 0;
 	virtual void SetChanged(BOOL bChanged) = 0;
+
+	virtual Color GetColor() = 0;
+	virtual void SetColor(Color& clr) = 0;
 };
 
 class CShapeBase : public IShape
@@ -93,6 +96,9 @@ public:
 	virtual BOOL IsChanged();
 	virtual void SetChanged(BOOL bChanged);
 
+	virtual Color GetColor();
+	virtual void SetColor(Color& clr);
+
 protected:
 	virtual BOOL IsCanHitTest();
 
@@ -104,9 +110,9 @@ protected:
 	int m_nHandleInflate;
 	SolidBrush* m_pHandleBrush;
 	Pen* m_pHandlePen;
+	Color m_color;
 
 	POINT m_penwidth;
-	Pen* m_ppen;
 };
 
 interface IOperElement

@@ -232,12 +232,14 @@ void CMainFrame::CreateDockingPane()
 
 	CXTPDockingPaneMiniWnd::m_bShowPinButton = FALSE;
 
-	CXTPDockingPane* pwndPane1 = m_paneManager.CreatePane(ID_LEFT_TOOL_BOX, CRect(0, 0,50, 120), xtpPaneDockLeft);
-	pwndPane1->SetTitle(_T("工具"));
-	pwndPane1->SetOptions(xtpPaneNoCloseable | xtpPaneNoCaption);
+	CXTPDockingPane* pwndPaneTool = m_paneManager.CreatePane(ID_LEFT_TOOL_BOX, CRect(0, 0, 50, 120), xtpPaneDockLeft);
+	pwndPaneTool->SetTitle(_T("工具"));
+	pwndPaneTool->SetOptions(xtpPaneNoCloseable | xtpPaneNoCaption);
 
-	//m_paneDlg.Create(CTreePaneDlg::IDD, this);
-	//pwndPane1->Attach(&m_paneDlg);
+	CXTPDockingPane* pwndPaneColor = m_paneManager.CreatePane(ID_PANE_COLOR, CRect(0, 0, 220, 130), xtpPaneDockRight);
+	pwndPaneColor->SetOptions(xtpPaneNoCloseable);
+	m_paneColorPicker.Create(CDlgColorPicker::IDD, this);
+	pwndPaneColor->Attach(&m_paneColorPicker);
 }
 
 void CMainFrame::SetOptionsStyle()

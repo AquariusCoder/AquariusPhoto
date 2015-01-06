@@ -116,11 +116,11 @@ CShapeBase::CShapeBase(void)
 	m_nHandleInflate = 3;
 	m_pHandlePen = new Pen(Color::Black, 1);
 	m_pHandleBrush = new SolidBrush(Color::White);
+	m_color = Color::Black;
 
 	// TODO pen width
 	m_penwidth.x = 2;
 	m_penwidth.y = 2;
-	m_ppen = new Pen(Color::Black, 2);
 	
 }
 
@@ -196,6 +196,16 @@ BOOL CShapeBase::IsCanHitTest()
 {
 	// no see no hit
 	return (IsChanged() || IsErased()) ? FALSE : TRUE;
+}
+
+Color CShapeBase::GetColor()
+{
+	return m_color;
+}
+
+void CShapeBase::SetColor(Color& clr)
+{
+	m_color = clr;
 }
 
 COperQueueBase::COperQueueBase(void)

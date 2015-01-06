@@ -203,6 +203,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ColorButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ColorManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DlgColorPicker.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Element_Clip.cpp"
 				>
 			</File>
@@ -289,6 +301,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ColorButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ColorManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GeometryAlgorithm.h"
 				>
 			</File>
@@ -356,6 +376,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Dialog"
+				>
+				<File
+					RelativePath=".\DlgColorPicker.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -413,5 +441,9 @@
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="AquariusPhoto.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

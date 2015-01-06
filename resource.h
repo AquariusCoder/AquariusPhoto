@@ -29,6 +29,7 @@
 #define ID_CLIPE                        122
 #define ID_RESET_SIZE                   123
 #define ID_SELECT_SHAPE                 124
+#define ID_PANE_COLOR                   125
 #define IDR_MAINFRAME                   128
 #define IDB_GEAR                        131
 #define IDB_BACKSTAGEICONS              132
@@ -50,6 +51,17 @@
 #define IDR_MENU2                       155
 #define IDR_MENU_VIEW                   155
 #define IDR_QUICK_ACCESS                156
+#define IDD_COLOR                       157
+#define IDC_SLIDER_R                    1002
+#define IDC_SLIDER_G                    1003
+#define IDC_SLIDER_B                    1004
+#define IDC_FOREGROUND_COLOR            1012
+#define IDC_BACKGROUND_COLOR            1013
+#define IDC_EDIT1                       1015
+#define IDC_EDIT_CLR_G                  1016
+#define IDC_EDIT3                       1017
+#define IDC_EDIT_CLR_B                  1017
+#define IDC_EDIT_CLR_R                  1018
 #define ID_FILE_TEST                    32771
 #define ID_APP_CLOSE                    32771
 #define ID_TEST_SHOW                    32772
@@ -63,9 +75,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_RESOURCE_VALUE        158
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           112
 #endif
 #endif

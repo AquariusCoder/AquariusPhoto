@@ -3,6 +3,7 @@
 
 
 #pragma once
+#include "DlgColorPicker.h"
 
 class CMainFrame : public CXTPFrameWnd
 {
@@ -40,6 +41,8 @@ protected:  // 控件条嵌入成员
 	CString						m_csStylesPath;
 
 	CXTPControlGalleryItems*	m_pItemsShapes;
+
+	CDlgColorPicker m_paneColorPicker;
 
 // 生成的消息映射函数
 protected:

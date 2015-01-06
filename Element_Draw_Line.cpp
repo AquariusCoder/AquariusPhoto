@@ -2,10 +2,12 @@
 #include "Element_Draw_Line.h"
 #include "GeometryAlgorithm.h"
 
-CElement_Draw_Line::CElement_Draw_Line(CPoint& p1, CPoint& p2)
+CElement_Draw_Line::CElement_Draw_Line(CPoint& p1, CPoint& p2, Color* pClr/* = NULL*/)
 {
 	m_p1 = p1;
 	m_p2 = p2;
+	if(pClr != NULL)
+		m_color = *pClr;
 }
 
 CElement_Draw_Line::~CElement_Draw_Line(void)
@@ -28,7 +30,8 @@ BOOL CElement_Draw_Line::Do(Image** ppImg)
 BOOL CElement_Draw_Line::DrawShape(Graphics* pGraphics)
 {
 	// draw shape
-	pGraphics->DrawLine(m_ppen, m_p1.x, m_p1.y, m_p2.x, m_p2.y);
+	Pen pen(m_color, (REAL)(m_penwidth.x));
+	pGraphics->DrawLine(&pen, m_p1.x, m_p1.y, m_p2.x, m_p2.y);
 
 	// draw handle
 	if(IsSelected())
@@ -126,6 +129,7 @@ IShape* CElement_Draw_Line::Clone()
 	pClone->m_nHandleInflate = m_nHandleInflate;
 	//*pClone->m_pHandleBrush = *m_pHandleBrush;
 	//*pClone->m_pHandlePen = *m_pHandlePen;
+	pClone->m_color = m_color;
 
 	pClone->m_pParent = this;
 

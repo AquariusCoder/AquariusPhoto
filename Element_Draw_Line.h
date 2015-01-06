@@ -4,7 +4,7 @@
 class CElement_Draw_Line : public COperElementBase, public CShapeBase
 {
 public:
-	CElement_Draw_Line(CPoint& p1, CPoint& p2);
+	CElement_Draw_Line(CPoint& p1, CPoint& p2, Color* pClr = NULL);
 	~CElement_Draw_Line(void);
 
 // IOperElement

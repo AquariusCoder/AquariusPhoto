@@ -5,6 +5,7 @@
 #include "OperManager.h"
 #include "ToolManager.h"
 #include "Tool_SelectShape.h"
+#include "ColorManager.h"
 
 CTool_DrawLine::CTool_DrawLine(void)
 {
@@ -27,7 +28,7 @@ void CTool_DrawLine::OnLButtonUp(CView* pView, UINT nFlages, CPoint& point)
 	CToolBase::OnLButtonUp(pView, nFlages, point);
 	
 	// add line shape
-	CElement_Draw_Line* pElem = new CElement_Draw_Line(m_firstPoint, m_lastPoint);
+	CElement_Draw_Line* pElem = new CElement_Draw_Line(m_firstPoint, m_lastPoint, CColorManager::Instance()->GetForegroundColor());
 	COperManager::Instance()->Add(pElem);
 
 	ITool* pTool = CToolManager::Instance()->GetTool(TM_SELECT_SHAPE);
@@ -54,7 +55,7 @@ void CTool_DrawLine::OnMouseMove(CView* pView, UINT nFlages, CPoint& point)
 	CAquariusPhotoDoc* pDoc = dynamic_cast<CAquariusPhotoDoc *>(pView->GetDocument());
 	ASSERT(pDoc);
 
-	CElement_Draw_Line* pElement = new CElement_Draw_Line(m_firstPoint, m_lastPoint);
+	CElement_Draw_Line* pElement = new CElement_Draw_Line(m_firstPoint, m_lastPoint, CColorManager::Instance()->GetForegroundColor());
 	pDoc->SetDynamicShape(pElement);
 
 	pView->Invalidate(FALSE);
@@ -62,7 +63,7 @@ void CTool_DrawLine::OnMouseMove(CView* pView, UINT nFlages, CPoint& point)
 
 void CTool_DrawLine::OnLButtonDblClk(CView* pView, UINT nFlages, CPoint& point)
 {
-
+	
 }
 
 void CTool_DrawLine::OnActivate(CView* pView)
